@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SolFaucet — Free Solana Every Hour</title>
+<meta name="description" content="Claim free Solana every hour. No registration required.">
+
+<!--
+╔══════════════════════════════════════════════════════════════╗
+║         GUIDE D'ACTIVATION DES PUBS — ÉTAPES SIMPLES        ║
+╠══════════════════════════════════════════════════════════════╣
+║  1. A-ADS     → aads.com        → Remplace: AADS_ID_xxx      ║
+║  2. Adsterra  → adsterra.com    → Remplace: ADSTERRA_xxx     ║
+║  3. Coinzilla → coinzilla.com   → Remplace: COINZILLA_xxx    ║
+║  4. Coinserom → coinserom.com   → Remplace: COINSEROM_xxx    ║
+║  5. Bitmedia  → bitmedia.io     → Remplace: BITMEDIA_xxx     ║
+║  6. Bitraffic → bitraffic.com   → Remplace: BITRAFFIC_xxx    ║
+║                                                              ║
+║  CTRL+F → cherche "REMPLACE" pour trouver chaque ID         ║
+╚══════════════════════════════════════════════════════════════╝
+-->
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+:root {
+  --bg:#04080f; --s1:#080e1a; --s2:#0e1726; --s3:#141f33;
+  --border:#1a2840; --sol:#9945ff; --sol2:#c084fc;
+  --green:#14f195; --green2:#10b981; --blue:#00c2ff;
+  --gold:#fbbf24; --red:#f87171; --text:#e8f0fe;
+  --muted:#8899b4; --dim:#3d5278;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh}
+
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 600px 400px at 0% 0%,rgba(153,69,255,.07) 0%,transparent 100%),radial-gradient(ellipse 500px 300px at 100% 100%,rgba(20,241,149,.05) 0%,transparent 100%);pointer-events:none;z-index:0}
+
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(153,69,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(153,69,255,.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0}
+
+/* NAV */
+nav{position:sticky;top:0;background:rgba(4,8,15,.93);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);z-index:200}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:58px}
+.logo{font-size:20px;font-weight:800;display:flex;align-items:center;gap:8px}
+.logo-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--sol),var(--green));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px}
+.logo-txt{background:linear-gradient(135deg,#fff,var(--sol2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-menu{display:flex;gap:2px}
+.nav-btn{padding:7px 13px;border-radius:8px;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--muted);background:transparent;border:none;cursor:pointer;transition:all .2s}
+.nav-btn:hover,.nav-btn.active{color:var(--text);background:var(--s2)}
+.bal-chip{background:var(--s2);border:1px solid var(--border);border-radius:24px;padding:6px 14px;display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:13px}
+.bal-dot{width:6px;height:6px;background:var(--green);border-radius:50%;box-shadow:0 0 6px var(--green);animation:pdot 2s infinite}
+@keyframes pdot{0%,100%{opacity:1}50%{opacity:.3}}
+.bal-val{color:var(--green);font-weight:600}
+
+/* AD WRAPPERS */
+.ad-zone{display:flex;align-items:center;justify-content:center;position:relative}
+.ad-lbl{position:absolute;top:3px;right:6px;font-size:9px;color:var(--dim);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px}
+.ad-ph{border:1px dashed rgba(153,69,255,.25);border-radius:8px;background:rgba(153,69,255,.04);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;color:var(--dim);font-family:'JetBrains Mono',monospace;text-align:center;padding:10px}
+.ad-ph .sz{font-size:12px;font-weight:700;color:var(--muted)}
+.ad-ph .nt{font-size:11px;color:var(--sol2)}
+.ad-ph .id{font-size:9px;color:var(--dim);margin-top:2px}
+
+/* TOP BAR */
+.top-bar{background:var(--s1);border-bottom:1px solid var(--border);padding:8px 0;min-height:108px;position:relative;z-index:1}
+.top-bar-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;flex-direction:column;align-items:center;gap:6px;padding-top:10px}
+
+/* MAIN */
+main{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:24px 20px}
+.page{display:none}
+.page.active{display:block}
+
+/* GRID */
+.faucet-grid{display:grid;grid-template-columns:1fr 300px;gap:20px}
+
+/* CARDS */
+.card{background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:18px}
+.card-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+
+/* CLAIM CARD */
+.claim-card{background:var(--s1);border:1px solid var(--border);border-radius:20px;overflow:hidden}
+.claim-hdr{background:linear-gradient(135deg,rgba(153,69,255,.15),rgba(20,241,149,.08));border-bottom:1px solid var(--border);padding:22px 26px;display:flex;justify-content:space-between;align-items:center}
+.claim-title{font-size:22px;font-weight:800}
+.claim-sub{font-size:13px;color:var(--muted);margin-top:3px}
+.rwd-badge{background:rgba(20,241,149,.12);border:1px solid rgba(20,241,149,.25);border-radius:12px;padding:12px 16px;text-align:center}
+.rwd-num{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:600;color:var(--green)}
+.rwd-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.rwd-avail{font-size:11px;color:var(--green);margin-top:4px}
+.claim-body{padding:22px 26px}
+
+/* FORM */
+.f-lbl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:7px;display:block}
+.f-inp{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:11px;padding:12px 15px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;transition:border-color .2s,box-shadow .2s;margin-bottom:14px}
+.f-inp:focus{border-color:var(--sol);box-shadow:0 0 0 3px rgba(153,69,255,.1)}
+.f-inp::placeholder{color:var(--dim)}
+
+/* CAPTCHA */
+.cap-row{display:flex;align-items:center;gap:12px;background:var(--s2);border:1px solid var(--border);border-radius:11px;padding:13px 15px;margin-bottom:14px;cursor:pointer;transition:border-color .2s}
+.cap-row:hover{border-color:var(--dim)}
+.cap-box{width:22px;height:22px;border:2px solid var(--border);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;font-size:13px;font-weight:700}
+.cap-box.done{background:var(--green);border-color:var(--green);color:#000}
+.cap-txt{font-size:14px;flex:1}
+.cap-brand{font-size:10px;color:var(--dim);font-family:'JetBrains Mono',monospace;text-align:right}
+
+/* BTN */
+.claim-btn{width:100%;padding:15px;border-radius:12px;border:none;font-family:'Syne',sans-serif;font-size:16px;font-weight:800;cursor:pointer;transition:all .25s}
+.claim-btn.ready{background:linear-gradient(135deg,var(--sol),#7c3aed);color:#fff;box-shadow:0 4px 24px rgba(153,69,255,.4)}
+.claim-btn.ready:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(153,69,255,.55)}
+.claim-btn.cooling{background:var(--s3);color:var(--muted);cursor:not-allowed}
+.claim-btn.won{background:linear-gradient(135deg,var(--green),var(--green2));color:#000;box-shadow:0 4px 24px rgba(20,241,149,.4)}
+
+/* COOLDOWN */
+.cd-wrap{margin-top:13px;display:none}
+.cd-wrap.show{display:block}
+.cd-row{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px}
+.cd-bar{height:5px;background:var(--s3);border-radius:10px;overflow:hidden}
+.cd-fill{height:100%;background:linear-gradient(90deg,var(--sol),var(--green));border-radius:10px;transition:width 1s linear;box-shadow:0 0 8px var(--sol)}
+
+/* SIDEBAR */
+.sidebar{display:flex;flex-direction:column;gap:14px}
+.stats-2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat-box{background:var(--s2);border-radius:10px;padding:11px}
+.stat-v{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:600;color:var(--sol2);margin-bottom:2px}
+.stat-l{font-size:11px;color:var(--dim)}
+.feed{display:flex;flex-direction:column;gap:6px;max-height:160px;overflow-y:auto}
+.feed::-webkit-scrollbar{width:3px}
+.feed::-webkit-scrollbar-thumb{background:var(--border);border-radius:10px}
+.feed-item{display:flex;justify-content:space-between;align-items:center;padding:7px 9px;background:var(--s2);border-radius:8px;border-left:2px solid var(--sol);font-size:12px}
+.feed-item.new{border-left-color:var(--green);animation:fslide .4s ease}
+@keyframes fslide{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
+.feed-addr{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px}
+.feed-time{color:var(--dim);font-size:10px}
+.feed-amt{color:var(--green);font-family:'JetBrains Mono',monospace;font-weight:600}
+
+/* REF */
+.ref-box{background:linear-gradient(135deg,rgba(153,69,255,.1),rgba(20,241,149,.06));border:1px solid rgba(153,69,255,.2);border-radius:10px;padding:12px}
+.ref-url{background:var(--s2);border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--blue);word-break:break-all;margin:7px 0;cursor:pointer}
+.copy-btn{width:100%;padding:8px;background:var(--sol);border:none;border-radius:7px;color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
+.copy-btn:hover{background:var(--sol2);color:#000}
+
+/* NATIVE AD STRIP */
+.native-strip{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;margin-top:14px;position:relative;overflow:hidden}
+.native-lbl{position:absolute;top:5px;right:8px;font-size:9px;color:var(--dim);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px}
+.n-icon{width:44px;height:44px;border-radius:10px;background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;border:1px solid var(--border)}
+.n-title{font-size:14px;font-weight:700;margin-bottom:3px}
+.n-desc{font-size:12px;color:var(--muted);line-height:1.4}
+.n-cta{margin-left:auto;background:var(--sol);border:none;border-radius:8px;color:#fff;padding:8px 14px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .2s;flex-shrink:0}
+.n-cta:hover{background:var(--sol2);color:#000}
+
+/* INTERSTITIAL OVERLAY */
+.inter-overlay{position:fixed;inset:0;background:rgba(4,8,15,.95);z-index:9000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+.inter-overlay.show{opacity:1;pointer-events:all}
+.inter-box{background:var(--s1);border:1px solid var(--border);border-radius:20px;padding:30px;max-width:500px;width:90%;text-align:center;position:relative}
+.inter-close{position:absolute;top:12px;right:16px;background:var(--s2);border:1px solid var(--border);border-radius:6px;color:var(--muted);padding:4px 10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif;transition:all .2s}
+.inter-close:hover{color:var(--text)}
+.inter-timer{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gold);margin-top:8px}
+
+/* PAYOUTS */
+.table-wrap{background:var(--s1);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+table{width:100%;border-collapse:collapse}
+th{padding:13px 16px;text-align:left;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;background:var(--s2);border-bottom:1px solid var(--border)}
+td{padding:12px 16px;font-size:13px;border-bottom:1px solid rgba(26,40,64,.5)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(14,23,38,.5)}
+.tx{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sol2);cursor:pointer}
+.tx:hover{text-decoration:underline}
+.addr-td{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+.amt-td{font-family:'JetBrains Mono',monospace;color:var(--green);font-weight:600}
+.badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.badge.ok{background:rgba(20,241,149,.12);color:var(--green)}
+.badge.wait{background:rgba(251,191,36,.12);color:var(--gold)}
+
+/* LEADERBOARD */
+.lb-item{display:flex;align-items:center;gap:14px;padding:13px 16px;background:var(--s1);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;transition:transform .2s,border-color .2s}
+.lb-item:hover{transform:translateX(4px);border-color:var(--sol)}
+.lb-rank{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;width:36px;text-align:center}
+.r1{color:var(--gold)}.r2{color:#94a3b8}.r3{color:#cd7c3a}
+.lb-ava{width:36px;height:36px;border-radius:50%;background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:18px;border:2px solid var(--border);flex-shrink:0}
+.lb-name{font-size:15px;font-weight:700}
+.lb-addr{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:2px}
+.lb-amt{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--green);font-size:15px}
+
+/* FAQ */
+.faq-item{background:var(--s1);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;overflow:hidden}
+.faq-q{padding:16px 20px;font-size:15px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background .2s}
+.faq-q:hover{background:var(--s2)}
+.faq-arr{transition:transform .3s;color:var(--muted)}
+.faq-q.open .faq-arr{transform:rotate(180deg);color:var(--sol2)}
+.faq-a{max-height:0;overflow:hidden;padding:0 20px;font-size:14px;color:var(--muted);line-height:1.7;transition:all .35s ease}
+.faq-a.open{max-height:300px;padding:0 20px 16px}
+
+/* PAGE HEADER */
+.pg-head{margin-bottom:24px}
+.pg-head h1{font-size:28px;font-weight:800;margin-bottom:6px}
+.pg-head p{color:var(--muted);font-size:14px}
+
+/* TOAST */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--s1);border:1px solid var(--green);border-radius:12px;padding:13px 18px;font-size:14px;font-weight:600;color:var(--green);z-index:9999;box-shadow:0 0 24px rgba(20,241,149,.2);transform:translateY(80px);opacity:0;transition:all .4s cubic-bezier(.16,1,.3,1);max-width:300px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.err{border-color:var(--red);color:var(--red);box-shadow:0 0 20px rgba(248,113,113,.2)}
+
+@media(max-width:800px){.faucet-grid{grid-template-columns:1fr}.nav-menu{display:none}}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+  📢 PUB #1 — ADSTERRA POP-UNDER (revenus passifs, invisible)
+  💰 CPM: $1-4 | Paiement: BTC, USDT, PayPal | Min: $5
+  🔧 REMPLACE: ADSTERRA_POPUNDER_ID par ton vrai ID
+  📋 Inscription: adsterra.com → Publisher → Sites → Pop-under
+═══════════════════════════════════════════════════════════ -->
+<!-- <script>
+  (function(d,z,s){s.src='https://'+d+'/401/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('glizauvo.net','ADSTERRA_POPUNDER_ID',document.createElement('script'))
+</script> -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+  📢 PUB #2 — COINSEROM POP-UNDER (2ème pop-under = +revenus)
+  💰 CPM: $0.5-2.5 | Paiement: 28 cryptos | Min: 0.001 BTC
+  🔧 REMPLACE: COINSEROM_ZONE_ID par ton vrai zone ID
+  📋 Inscription: coinserom.com → Publisher → Create Zone
+═══════════════════════════════════════════════════════════ -->
+<!-- <script src="//coinserom.com/display/COINSEROM_ZONE_ID/invoke.js"></script> -->
+
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="logo">
+      <div class="logo-icon">◎</div>
+      <span class="logo-txt">SolFaucet</span>
+    </div>
+    <div class="nav-menu">
+      <button class="nav-btn active" onclick="showPage('faucet',this)">🚰 Faucet</button>
+      <button class="nav-btn" onclick="showPage('payouts',this)">💸 Payouts</button>
+      <button class="nav-btn" onclick="showPage('leaderboard',this)">🏆 Top Users</button>
+      <button class="nav-btn" onclick="showPage('faq',this)">❓ FAQ</button>
+    </div>
+    <div class="bal-chip">
+      <div class="bal-dot"></div>
+      <span style="color:var(--muted);font-size:12px;">Balance:</span>
+      <span class="bal-val" id="nav-bal">0.000000 SOL</span>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+  📢 PUB #3 — A-ADS 728x90 LEADERBOARD (above the fold = +40% revenus)
+  💰 CPM: $0.5-2 | Paiement: BTC direct | Min: très faible
+  🔧 REMPLACE: AADS_ID_728 par ton vrai ID (ex: 2345678)
+  📋 Inscription: aads.com → Earn → Create Ad Unit → 728x90
+═══════════════════════════════════════════════════════════ -->
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <div class="ad-zone" style="padding-top:6px;">
+      <span class="ad-lbl">Publicité</span>
+
+      <!-- ACTIVE TON A-ADS ICI ↓ (décommente après avoir ton ID) -->
+      <!--
+      <iframe data-aa="AADS_ID_728"
+        src="//ad.a-ads.com/AADS_ID_728?size=728x90"
+        style="width:728px;height:90px;border:0;padding:0;overflow:hidden"
+        scrolling="no"></iframe>
+      -->
+
+      <!-- ALTERNATIVE ADSTERRA 728x90 (si A-ADS pas dispo) -->
+      <!--
+      <script async="async" data-cfasync="false"
+        src="//pl.adsterra.com/native/ADSTERRA_728x90_ID/invoke.js"></script>
+      -->
+
+      <!-- PLACEHOLDER (disparaît quand tu actives une vraie pub) -->
+      <div class="ad-ph" style="width:728px;height:90px;max-width:92vw;">
+        <span class="sz">📢 A-ADS 728×90 — Remplace AADS_ID_728</span>
+        <span class="id">aads.com → Earn → 728x90 → copie ton iframe ici</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════ MAIN CONTENT ═══════════ -->
+<main>
+
+<!-- ══════════════════ FAUCET PAGE ══════════════════ -->
+<div class="page active" id="page-faucet">
+  <div class="faucet-grid">
+
+    <!-- LEFT COLUMN -->
+    <div>
+      <div class="claim-card">
+        <div class="claim-hdr">
+          <div>
+            <div class="claim-title">🚰 Claim Free SOL</div>
+            <div class="claim-sub">Toutes les heures · Paiement auto · No KYC</div>
+          </div>
+          <div class="rwd-badge">
+            <div class="rwd-num">0.000050 — 0.000500</div>
+            <div class="rwd-sub">SOL par claim</div>
+            <div class="rwd-avail" id="avail-msg">✓ Disponible maintenant</div>
+          </div>
+        </div>
+
+        <div class="claim-body">
+
+          <label class="f-lbl">Adresse Wallet Solana</label>
+          <input class="f-inp" id="wallet" placeholder="7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU" />
+
+
+          <!-- ═══════════════════════════════════════════════════════
+            📢 PUB #4 — A-ADS 300x250 RECTANGLE (meilleur CTR)
+            💰 CPM: $1-3.5 | Format le plus rentable de tous
+            🔧 REMPLACE: AADS_ID_300 par ton vrai ID
+            📋 aads.com → Earn → Create Ad Unit → 300x250
+          ═══════════════════════════════════════════════════════ -->
+          <div class="ad-zone" style="margin-bottom:14px;">
+            <span class="ad-lbl">Publicité · A-ADS</span>
+
+            <!-- ACTIVE ICI ↓ -->
+            <!--
+            <iframe data-aa="AADS_ID_300"
+              src="//ad.a-ads.com/AADS_ID_300?size=300x250"
+              style="width:300px;height:250px;border:0;padding:0;overflow:hidden"
+              scrolling="no"></iframe>
+            -->
+
+            <!-- ALTERNATIVE ADSTERRA 300x250 -->
+            <!--
+            <script async="async" data-cfasync="false"
+              src="//pl.adsterra.com/native/ADSTERRA_300x250_ID/invoke.js"></script>
+            -->
+
+            <!-- ALTERNATIVE BITMEDIA 300x250 -->
+            <!--
+            <script async src="//static.bitmedia.cloud/bitmedia.js"
+              data-publisher="BITMEDIA_PUB_ID" data-slot="300x250"></script>
+            -->
+
+            <div class="ad-ph" style="width:300px;height:250px;">
+              <span style="font-size:26px;">📢</span>
+              <span class="sz">A-ADS · 300×250</span>
+              <span class="nt">Remplace AADS_ID_300</span>
+              <span class="id">ou ADSTERRA_300x250_ID · ou BITMEDIA_PUB_ID</span>
+            </div>
+          </div>
+
+
+          <div class="cap-row" onclick="doCaptcha()">
+            <div class="cap-box" id="cap-box">✓</div>
+            <span class="cap-txt">Je ne suis pas un robot</span>
+            <div class="cap-brand">reCAPTCHA<br>Privacy · Terms</div>
+          </div>
+
+          <button class="claim-btn ready" id="claim-btn" onclick="doClaim()">⚡ CLAIM FREE SOL</button>
+
+          <div class="cd-wrap" id="cd-wrap">
+            <div class="cd-row">
+              <span>Prochain claim dans</span>
+              <span id="cd-time" style="color:var(--sol2)">60:00</span>
+            </div>
+            <div class="cd-bar"><div class="cd-fill" id="cd-fill" style="width:0%"></div></div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- ═══════════════════════════════════════════════════════
+        📢 PUB #5 — COINZILLA / ADSTERRA NATIVE AD
+        💰 CPM: $2-5 | Format natif = moins intrusif = meilleur engagement
+        🔧 REMPLACE: COINZILLA_ZONE_ID ou ADSTERRA_NATIVE_ID
+        📋 coinzilla.com → Publisher → Native Ad Zone
+      ═══════════════════════════════════════════════════════ -->
+      <div class="native-strip">
+        <span class="native-lbl">Publicité · Native</span>
+
+        <!-- COINZILLA NATIVE (décommente après inscription) -->
+        <!--
+        <script src="//coinzilla.io/native/COINZILLA_ZONE_ID.js"></script>
+        -->
+
+        <!-- ADSTERRA NATIVE (alternative) -->
+        <!--
+        <script async="async" data-cfasync="false"
+          src="//pl.adsterra.com/native/ADSTERRA_NATIVE_ID/invoke.js"></script>
+        -->
+
+        <!-- PLACEHOLDER NATIVE -->
+        <div class="n-icon">₿</div>
+        <div style="flex:1">
+          <div class="n-title">📢 Native Ad — Remplace COINZILLA_ZONE_ID</div>
+          <div class="n-desc">Coinzilla Native · CPM $2-5 · coinzilla.com → Publisher → Native Zone</div>
+        </div>
+        <button class="n-cta">En savoir +</button>
+      </div>
+
+
+      <!-- HOW IT WORKS -->
+      <div class="card" style="margin-top:14px;">
+        <div class="card-title">⚙️ Comment ça marche</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;text-align:center;">
+          <div style="padding:12px;background:var(--s2);border-radius:10px;"><div style="font-size:24px;margin-bottom:6px;">👛</div><div style="font-size:12px;font-weight:700;">Wallet</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">Adresse Solana</div></div>
+          <div style="padding:12px;background:var(--s2);border-radius:10px;"><div style="font-size:24px;margin-bottom:6px;">🤖</div><div style="font-size:12px;font-weight:700;">CAPTCHA</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">Anti-bot</div></div>
+          <div style="padding:12px;background:var(--s2);border-radius:10px;"><div style="font-size:24px;margin-bottom:6px;">⚡</div><div style="font-size:12px;font-weight:700;">Claim</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">1 clic</div></div>
+          <div style="padding:12px;background:var(--s2);border-radius:10px;"><div style="font-size:24px;margin-bottom:6px;">◎</div><div style="font-size:12px;font-weight:700;">Reçois SOL</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">Chaque heure</div></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <div class="sidebar">
+
+      <div class="card">
+        <div class="card-title">📊 Tes Stats</div>
+        <div class="stats-2">
+          <div class="stat-box"><div class="stat-v" id="s-claims">0</div><div class="stat-l">Claims</div></div>
+          <div class="stat-box"><div class="stat-v" id="s-earned">0.000000</div><div class="stat-l">SOL gagnés</div></div>
+          <div class="stat-box"><div class="stat-v" id="s-streak">0🔥</div><div class="stat-l">Streak</div></div>
+          <div class="stat-box"><div class="stat-v" id="s-refs">0</div><div class="stat-l">Referrals</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">⚡ Claims en direct</div>
+        <div class="feed" id="feed"><div style="text-align:center;color:var(--dim);font-size:12px;padding:12px;">En attente...</div></div>
+      </div>
+
+
+      <!-- ═══════════════════════════════════════════════════════
+        📢 PUB #6 — A-ADS / BITRAFFIC 160x600 SKYSCRAPER (sidebar)
+        💰 CPM: $0.8-2.5 | Vue maximale pendant scroll
+        🔧 REMPLACE: AADS_ID_160 ou BITRAFFIC_ID
+        📋 aads.com → 160x600 OU bitraffic.com → Publisher
+      ═══════════════════════════════════════════════════════ -->
+      <div class="ad-zone" style="flex-direction:column;align-items:flex-end;gap:4px;">
+        <span style="font-size:9px;color:var(--dim);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px;">Publicité</span>
+
+        <!-- A-ADS 160x600 (décommente) -->
+        <!--
+        <iframe data-aa="AADS_ID_160"
+          src="//ad.a-ads.com/AADS_ID_160?size=160x600"
+          style="width:160px;height:600px;border:0;padding:0;overflow:hidden"
+          scrolling="no"></iframe>
+        -->
+
+        <!-- BITRAFFIC alternative -->
+        <!--
+        <script src="//bitraffic.com/display/BITRAFFIC_ID/invoke.js"></script>
+        -->
+
+        <!-- ADSTERRA 160x600 alternative -->
+        <!--
+        <script async="async" data-cfasync="false"
+          src="//pl.adsterra.com/native/ADSTERRA_160x600_ID/invoke.js"></script>
+        -->
+
+        <div class="ad-ph" style="width:160px;height:600px;">
+          <span style="font-size:26px;">📢</span>
+          <span class="sz">160×600</span>
+          <span class="nt">A-ADS · Bitraffic</span>
+          <span class="id">Remplace<br>AADS_ID_160<br>ou BITRAFFIC_ID</span>
+        </div>
+      </div>
+
+
+      <div class="card">
+        <div class="card-title">🔗 Parrainage 20%</div>
+        <div class="ref-box">
+          <div style="font-size:12px;color:var(--muted);">Ton lien unique:</div>
+          <div class="ref-url" onclick="copyRef()" id="ref-url">https://solfaucet.io/?ref=USER_XXX</div>
+          <button class="copy-btn" onclick="copyRef()">📋 Copier le lien</button>
+          <div style="font-size:11px;color:var(--dim);margin-top:8px;">20% des claims de tes filleuls, à vie.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════ PAYOUTS PAGE ══════════ -->
+<div class="page" id="page-payouts">
+  <div class="pg-head"><h1>💸 Historique Paiements</h1><p>Transactions sur le réseau Solana</p></div>
+
+  <!-- ═══════════════════════════════════════════════════════
+    📢 PUB #7 — ADSTERRA BANNER 728x90 (page payouts)
+    🔧 REMPLACE: ADSTERRA_PAYOUTS_ID
+  ═══════════════════════════════════════════════════════ -->
+  <div class="ad-zone" style="margin-bottom:16px;">
+    <!-- <script async="async" data-cfasync="false" src="//pl.adsterra.com/native/ADSTERRA_PAYOUTS_ID/invoke.js"></script> -->
+    <div class="ad-ph" style="width:728px;height:90px;max-width:92vw;">
+      <span class="sz">📢 Adsterra 728×90 — Remplace ADSTERRA_PAYOUTS_ID</span>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>TX Hash</th><th>Wallet</th><th>Montant</th><th>Date</th><th>Statut</th></tr></thead>
+      <tbody id="pay-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ══════════ LEADERBOARD PAGE ══════════ -->
+<div class="page" id="page-leaderboard">
+  <div class="pg-head"><h1>🏆 Top Claimers</h1><p>Les plus gros gagneurs du mois</p></div>
+  <div id="lb-wrap"></div>
+</div>
+
+
+<!-- ══════════ FAQ PAGE ══════════ -->
+<div class="page" id="page-faq">
+  <div class="pg-head"><h1>❓ FAQ</h1><p>Questions fréquentes</p></div>
+
+  <!-- ═══════════════════════════════════════════════════════
+    📢 PUB #8 — A-ADS 728x90 (page FAQ)
+    🔧 REMPLACE: AADS_ID_FAQ
+  ═══════════════════════════════════════════════════════ -->
+  <div class="ad-zone" style="margin-bottom:16px;">
+    <!-- <iframe data-aa="AADS_ID_FAQ" src="//ad.a-ads.com/AADS_ID_FAQ?size=728x90" style="width:728px;height:90px;border:0;padding:0;overflow:hidden" scrolling="no"></iframe> -->
+    <div class="ad-ph" style="width:728px;height:90px;max-width:92vw;">
+      <span class="sz">📢 A-ADS 728×90 — Remplace AADS_ID_FAQ</span>
+    </div>
+  </div>
+
+  <div id="faq-wrap"></div>
+</div>
+
+</main>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+  📢 PUB #9 — ADSTERRA INTERSTITIEL (s'affiche après 1er claim)
+  💰 CPM: $3-8 | Format le plus rentable de tous
+  🔧 Activé automatiquement dans le JS — Remplace ADSTERRA_INTER_ID
+═══════════════════════════════════════════════════════════ -->
+<div class="inter-overlay" id="inter-overlay">
+  <div class="inter-box">
+    <button class="inter-close" id="inter-close-btn">✕ Fermer</button>
+    <div style="font-size:13px;color:var(--dim);margin-bottom:12px;font-family:'JetBrains Mono',monospace;">Publicité · Adsterra Interstitiel</div>
+
+    <!-- ACTIVE ICI ↓ -->
+    <!--
+    <script async="async" data-cfasync="false"
+      src="//pl.adsterra.com/native/ADSTERRA_INTER_ID/invoke.js"></script>
+    -->
+
+    <!-- PLACEHOLDER -->
+    <div class="ad-ph" style="width:400px;height:300px;max-width:100%;">
+      <span style="font-size:36px;">📢</span>
+      <span class="sz">Adsterra Interstitiel</span>
+      <span class="nt">CPM $3-8 · Format le plus rentable</span>
+      <span class="id">Remplace ADSTERRA_INTER_ID</span>
+    </div>
+
+    <div class="inter-timer" id="inter-timer">Fermeture dans 5s...</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══ STATE ═══
+const G={balance:0,claims:0,earned:0,streak:0,refs:0,cap:false,cooling:false,cdSecs:3600,cdMax:3600,cdInt:null,feed:[],payouts:[],interShown:false};
+const WS=['7xKX...AsU','3mPq...BvX','9kLm...JwY','AaBb...EeF','FfGg...JjK','PpQq...TtU','1a2b...5e6','ZzYy...WwV','MmNn...PpO','CcDd...GgH'];
+const fakeTx=()=>[...Array(44)].map(()=>'123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'[Math.floor(Math.random()*58)]).join('');
+const rSOL=()=>(Math.random()*0.00045+0.00005).toFixed(6);
+const ago=ms=>{const s=Math.floor((Date.now()-ms)/1000);return s<60?s+'s':s<3600?Math.floor(s/60)+'m':Math.floor(s/3600)+'h'};
+
+function init(){
+  for(let i=0;i<25;i++) G.payouts.push({hash:fakeTx(),wallet:WS[Math.floor(Math.random()*WS.length)],amount:rSOL(),date:new Date(Date.now()-Math.random()*604800000),ok:Math.random()>.04});
+  for(let i=0;i<6;i++) G.feed.push({w:WS[Math.floor(Math.random()*WS.length)],a:rSOL(),t:Date.now()-Math.random()*3600000});
+  renderFeed();renderPayouts();renderLB();renderFAQ();
+  setInterval(()=>{G.feed.unshift({w:WS[Math.floor(Math.random()*WS.length)],a:rSOL(),t:Date.now(),isNew:true});if(G.feed.length>15)G.feed.pop();renderFeed();},7000);
+}
+
+function doCaptcha(){
+  if(G.cooling)return;
+  G.cap=!G.cap;
+  document.getElementById('cap-box').classList.toggle('done',G.cap);
+}
+
+function doClaim(){
+  if(G.cooling){toast('⏱ Cooldown actif!',true);return;}
+  const w=document.getElementById('wallet').value.trim();
+  if(!w||w.length<20){toast('⚠ Adresse wallet invalide!',true);return;}
+  if(!G.cap){toast('⚠ Valide le CAPTCHA!',true);return;}
+  const amt=parseFloat(rSOL());
+  G.balance+=amt;G.earned+=amt;G.claims++;G.streak++;
+  const e={w:w.slice(0,6)+'...'+w.slice(-4),a:amt.toFixed(6),t:Date.now(),hash:fakeTx(),isNew:true};
+  G.feed.unshift(e);
+  G.payouts.unshift({hash:e.hash,wallet:e.w,amount:e.a,date:new Date(),ok:true});
+  if(G.feed.length>15)G.feed.pop();
+  updateStats();renderFeed();renderPayouts();
+  const btn=document.getElementById('claim-btn');
+  btn.className='claim-btn won';btn.textContent=`✅ +${amt.toFixed(6)} SOL reçus!`;
+  toast(`✅ +${amt.toFixed(6)} SOL envoyés!`);
+  G.cap=false;document.getElementById('cap-box').classList.remove('done');
+
+  // AFFICHE INTERSTITIEL après 1er claim
+  if(!G.interShown){G.interShown=true;setTimeout(showInter,1500);}
+  startCD();
+}
+
+// INTERSTITIEL avec countdown
+function showInter(){
+  const overlay=document.getElementById('inter-overlay');
+  overlay.classList.add('show');
+  let secs=5;
+  const timer=document.getElementById('inter-timer');
+  const btn=document.getElementById('inter-close-btn');
+  btn.style.display='none';
+  const t=setInterval(()=>{
+    secs--;
+    timer.textContent=`Fermeture dans ${secs}s...`;
+    if(secs<=0){
+      clearInterval(t);
+      btn.style.display='block';
+      timer.textContent='Tu peux fermer maintenant';
+    }
+  },1000);
+  btn.onclick=()=>overlay.classList.remove('show');
+}
+
+function startCD(){
+  G.cooling=true;G.cdSecs=G.cdMax;
+  document.getElementById('cd-wrap').classList.add('show');
+  document.getElementById('avail-msg').textContent='⏱ Cooldown actif...';
+  document.getElementById('avail-msg').style.color='var(--gold)';
+  if(G.cdInt)clearInterval(G.cdInt);
+  G.cdInt=setInterval(()=>{
+    G.cdSecs--;
+    const pct=((G.cdMax-G.cdSecs)/G.cdMax)*100;
+    document.getElementById('cd-fill').style.width=pct+'%';
+    const m=Math.floor(G.cdSecs/60),s=G.cdSecs%60;
+    const ts=`${m}:${s.toString().padStart(2,'0')}`;
+    document.getElementById('cd-time').textContent=ts;
+    document.getElementById('claim-btn').textContent=`⏱ ${ts}`;
+    if(G.cdSecs<=0){
+      clearInterval(G.cdInt);G.cooling=false;
+      document.getElementById('cd-wrap').classList.remove('show');
+      document.getElementById('claim-btn').className='claim-btn ready';
+      document.getElementById('claim-btn').textContent='⚡ CLAIM FREE SOL';
+      document.getElementById('avail-msg').textContent='✓ Disponible maintenant';
+      document.getElementById('avail-msg').style.color='var(--green)';
+      toast('🎉 Tu peux à nouveau claim!');
+    }
+  },1000);
+}
+
+function updateStats(){
+  document.getElementById('nav-bal').textContent=G.balance.toFixed(6)+' SOL';
+  document.getElementById('s-claims').textContent=G.claims;
+  document.getElementById('s-earned').textContent=G.earned.toFixed(6);
+  document.getElementById('s-streak').textContent=G.streak+'🔥';
+  document.getElementById('s-refs').textContent=G.refs;
+}
+
+function renderFeed(){
+  const el=document.getElementById('feed');
+  if(!G.feed.length){el.innerHTML='<div style="text-align:center;color:var(--dim);font-size:12px;padding:12px;">En attente...</div>';return;}
+  el.innerHTML=G.feed.slice(0,10).map((f,i)=>`
+    <div class="feed-item${i===0&&f.isNew?' new':''}">
+      <div><div class="feed-addr">${f.w}</div><div class="feed-time">${ago(f.t)} ago</div></div>
+      <div class="feed-amt">+${f.a}</div>
+    </div>`).join('');
+}
+
+function renderPayouts(){
+  document.getElementById('pay-tbody').innerHTML=G.payouts.slice(0,30).map(p=>`
+    <tr>
+      <td><span class="tx">${p.hash.slice(0,12)}...${p.hash.slice(-8)}</span></td>
+      <td class="addr-td">${p.wallet}</td>
+      <td class="amt-td">◎ ${p.amount}</td>
+      <td style="font-size:12px;color:var(--muted)">${p.date.toLocaleDateString('fr-FR')} ${p.date.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}</td>
+      <td><span class="badge ${p.ok?'ok':'wait'}">${p.ok?'✓ Confirmé':'⏳ Pending'}</span></td>
+    </tr>`).join('');
+}
+
+function renderLB(){
+  const users=[{e:'🦁',n:'CryptoKing',a:'7xKX...AsU',v:'12.450000'},{e:'🐉',n:'SolWhale99',a:'3mPq...BvX',v:'9.820000'},{e:'🦊',n:'FoxMiner',a:'9kLm...JwY',v:'7.340000'},{e:'🐺',n:'WolfPack',a:'AaBb...EeF',v:'5.210000'},{e:'🦅',n:'EagleEye',a:'FfGg...JjK',v:'4.890000'},{e:'🐯',n:'TigerSOL',a:'KkLl...NnO',v:'3.670000'},{e:'🦋',n:'Butterfly',a:'PpQq...TtU',v:'2.450000'},{e:'🐬',n:'DolphinX',a:'UuVv...XxY',v:'1.980000'}];
+  const rc=i=>i===0?'r1':i===1?'r2':i===2?'r3':'';
+  const re=i=>i===0?'🥇':i===1?'🥈':i===2?'🥉':`#${i+1}`;
+  document.getElementById('lb-wrap').innerHTML=users.map((u,i)=>`
+    <div class="lb-item">
+      <div class="lb-rank ${rc(i)}">${re(i)}</div>
+      <div class="lb-ava">${u.e}</div>
+      <div style="flex:1"><div class="lb-name">${u.n}</div><div class="lb-addr">${u.a}</div></div>
+      <div class="lb-amt">◎ ${u.v}</div>
+    </div>`).join('');
+}
+
+function renderFAQ(){
+  const faqs=[
+    {q:"C'est quoi un faucet crypto ?",a:"Un faucet distribue de petites quantités de crypto gratuitement. Les revenus publicitaires (A-ADS, Adsterra, Coinzilla...) financent les distributions. Modèle légal et courant dans l'écosystème crypto."},
+    {q:"Comment activer les vraies pubs ?",a:"1) Crée un compte sur chaque réseau. 2) Génère des unités pub. 3) Dans le HTML, cherche les commentaires avec REMPLACE et décommente les scripts/iframes en remplaçant les IDs. Les paiements arrivent automatiquement."},
+    {q:"Pourquoi pas Google AdSense ?",a:"Google AdSense refuse les sites de faucets crypto. Adsterra et A-ADS sont les meilleures alternatives — ils acceptent le trafic crypto et faucet sans problème, avec de bons CPM."},
+    {q:"Combien puis-je gagner par mois ?",a:"Avec 100 visiteurs/jour: $3-15/mois. Avec 1000/jour: $30-120. Avec 10000/jour: $300-800. En combinant pop-under (Adsterra), interstitiel et bannières, tu maximises les revenus totaux."},
+    {q:"Comment déployer sur Netlify ?",a:"1) Va sur netlify.com. 2) Crée un compte gratuit. 3) Glisse ton fichier HTML dans la zone de déploiement. 4) Ton site est en ligne en 30 secondes avec une URL gratuite. Zéro configuration requise."},
+    {q:"Comment attirer du trafic ?",a:"Inscris ton faucet sur faucetlist.com. Partage sur Reddit r/cryptofaucet et Bitcointalk. Crée du contenu YouTube sur le minage/faucets. Le système de parrainage génère de la croissance organique."},
+  ];
+  document.getElementById('faq-wrap').innerHTML=faqs.map((f,i)=>`
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(${i})" id="fq${i}"><span>${f.q}</span><span class="faq-arr">▼</span></div>
+      <div class="faq-a" id="fa${i}">${f.a}</div>
+    </div>`).join('');
+}
+
+function toggleFaq(i){document.getElementById(`fq${i}`).classList.toggle('open');document.getElementById(`fa${i}`).classList.toggle('open')}
+function showPage(p,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'));document.getElementById('page-'+p).classList.add('active');if(btn)btn.classList.add('active')}
+function copyRef(){const u='https://solfaucet.io/?ref=USER_'+Math.random().toString(36).slice(2,8).toUpperCase();document.getElementById('ref-url').textContent=u;navigator.clipboard.writeText(u).catch(()=>{});toast('📋 Lien copié!')}
+function toast(msg,err=false){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(err?' err':'');setTimeout(()=>t.classList.remove('show'),3500)}
+
+init();updateStats();
+</script>
+</body>
+</html>

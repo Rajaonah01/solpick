@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loto Cash - Jeu d'Argent Virtuel</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #9ca3af;
+            --gold: #fbbf24;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Wallet Section */
+        .wallet-section {
+            background: linear-gradient(135deg, #2d3748, #1e293b);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .wallet-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .wallet-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--gold), #f59e0b);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            box-shadow: 0 10px 20px -5px rgba(245, 158, 11, 0.3);
+        }
+
+        .wallet-title {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: white;
+        }
+
+        .balance-container {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .balance-label {
+            color: var(--gray);
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .balance-amount {
+            font-size: 3.5em;
+            font-weight: 700;
+            color: white;
+            line-height: 1;
+            margin-bottom: 5px;
+            text-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+        }
+
+        .balance-currency {
+            color: var(--primary);
+            font-size: 0.4em;
+            font-weight: 400;
+            margin-left: 10px;
+        }
+
+        .balance-change {
+            color: var(--success);
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .wallet-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .wallet-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 1em;
+        }
+
+        .wallet-btn.deposit {
+            background: linear-gradient(135deg, var(--success), #059669);
+            border: none;
+        }
+
+        .wallet-btn.withdraw {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+        }
+
+        .wallet-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .transaction-history {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .history-title {
+            color: white;
+            font-weight: 500;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--gray);
+            font-size: 0.9em;
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-type {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .transaction-type.deposit {
+            color: var(--success);
+        }
+
+        .transaction-type.withdraw {
+            color: var(--danger);
+        }
+
+        .transaction-type.game {
+            color: var(--warning);
+        }
+
+        .transaction-amount {
+            font-weight: 600;
+        }
+
+        .transaction-amount.positive {
+            color: var(--success);
+        }
+
+        .transaction-amount.negative {
+            color: var(--danger);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #2d3748, #1e293b);
+            border-radius: 30px;
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-title {
+            color: white;
+            font-size: 1.8em;
+            font-weight: 600;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            color: white;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .modal-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-input::placeholder {
+            color: var(--gray);
+        }
+
+        .modal-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .modal-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .modal-btn.confirm {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .modal-btn.cancel {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--gray);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        .quick-amounts {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .quick-amount {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .quick-amount:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Game Section */
+        .game-section {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .bet-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .bet-label {
+            color: white;
+            font-weight: 500;
+        }
+
+        .bet-input-group {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .bet-input {
+            width: 120px;
+            padding: 12px 15px;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        .bet-input:focus {
+            outline: none;
+        }
+
+        .bet-input::-webkit-inner-spin-button, 
+        .bet-input::-webkit-outer-spin-button {
+            opacity: 1;
+            height: 24px;
+        }
+
+        .bet-unit {
+            padding: 0 15px;
+            color: var(--gray);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .max-bet-btn {
+            background: rgba(99, 102, 241, 0.2);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 12px 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .max-bet-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .numbers-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .number-btn {
+            aspect-ratio: 1;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.5em;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(99, 102, 241, 0.2);
+            border: 2px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .number-btn:hover:not(:disabled) {
+            background: var(--primary);
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px -5px var(--primary);
+        }
+
+        .number-btn.selected {
+            background: linear-gradient(135deg, var(--success), #059669);
+            border-color: var(--success);
+        }
+
+        .number-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .draw-btn {
+            background: linear-gradient(135deg, var(--gold), #f59e0b);
+            color: var(--dark);
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.3em;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px -10px var(--gold);
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .draw-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px -10px var(--gold);
+        }
+
+        .draw-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .result-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .selected-balls, .result-balls {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .balls-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+            min-height: 80px;
+        }
+
+        .ball {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.3em;
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
+            animation: ballAppear 0.3s ease-out;
+        }
+
+        .ball.win {
+            background: linear-gradient(135deg, var(--gold), #f59e0b);
+            box-shadow: 0 0 30px var(--gold);
+        }
+
+        @keyframes ballAppear {
+            from {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) rotate(0);
+                opacity: 1;
+            }
+        }
+
+        .win-message {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+            border-radius: 20px;
+            border: 2px solid var(--success);
+            margin-top: 20px;
+        }
+
+        .win-amount {
+            font-size: 3em;
+            font-weight: 700;
+            color: var(--success);
+            text-shadow: 0 0 30px rgba(16, 185, 129, 0.5);
+        }
+
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-value {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .wallet-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .numbers-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .result-section {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- Wallet Section -->
+        <div class="wallet-section">
+            <div class="wallet-header">
+                <div class="wallet-icon">💰</div>
+                <div class="wallet-title">Mon Portefeuille Virtuel</div>
+            </div>
+
+            <div class="balance-container">
+                <div class="balance-label">SOLDE DISPONIBLE</div>
+                <div class="balance-amount">
+                    <span id="balance">1000</span>
+                    <span class="balance-currency">€</span>
+                </div>
+                <div class="balance-change" id="lastTransaction"></div>
+            </div>
+
+            <div class="wallet-actions">
+                <button class="wallet-btn deposit" onclick="game.showDepositModal()">
+                    <span>+</span> Dépôt
+                </button>
+                <button class="wallet-btn withdraw" onclick="game.showWithdrawModal()">
+                    <span>-</span> Retrait
+                </button>
+                <button class="wallet-btn" onclick="game.showHistory()">
+                    <span>📊</span> Historique
+                </button>
+            </div>
+
+            <!-- Transaction History (hidden by default) -->
+            <div class="transaction-history" id="transactionHistory" style="display: none;">
+                <div class="history-title">
+                    <span>📋</span> Dernières transactions
+                </div>
+                <div id="transactionsList"></div>
+            </div>
+        </div>
+
+        <!-- Game Section -->
+        <div class="game-section">
+            <div class="bet-controls">
+                <span class="bet-label">Mise :</span>
+                <div class="bet-input-group">
+                    <input type="number" id="betAmount" class="bet-input" min="1" max="1000" value="10">
+                    <span class="bet-unit">€</span>
+                </div>
+                <button class="max-bet-btn" onclick="game.setMaxBet()">Mise Max</button>
+            </div>
+
+            <div class="numbers-grid" id="numbersGrid"></div>
+
+            <button class="draw-btn" id="drawBtn" onclick="game.play()" disabled>
+                🎰 Lancer le tirage (5 €)
+            </button>
+
+            <div class="result-section">
+                <div class="selected-balls">
+                    <div style="color: white; font-weight: 500;">Vos numéros</div>
+                    <div class="balls-container" id="selectedBalls"></div>
+                </div>
+                <div class="result-balls">
+                    <div style="color: white; font-weight: 500;">Tirage</div>
+                    <div class="balls-container" id="resultBalls"></div>
+                </div>
+            </div>
+
+            <div id="winMessage" class="win-message" style="display: none;"></div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-section">
+            <div class="stat-card">
+                <div class="stat-value" id="gamesPlayed">0</div>
+                <div class="stat-label">Parties jouées</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalWins">0 €</div>
+                <div class="stat-label">Gains totaux</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="biggestWin">0 €</div>
+                <div class="stat-label">Plus gros gain</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Deposit/Withdraw -->
+    <div class="modal" id="transactionModal">
+        <div class="modal-content">
+            <div class="modal-title" id="modalTitle">Dépôt</div>
+            <div class="quick-amounts" id="quickAmounts">
+                <div class="quick-amount" onclick="game.setAmount(10)">10 €</div>
+                <div class="quick-amount" onclick="game.setAmount(50)">50 €</div>
+                <div class="quick-amount" onclick="game.setAmount(100)">100 €</div>
+                <div class="quick-amount" onclick="game.setAmount(200)">200 €</div>
+                <div class="quick-amount" onclick="game.setAmount(500)">500 €</div>
+                <div class="quick-amount" onclick="game.setAmount(1000)">1000 €</div>
+            </div>
+            <input type="number" id="modalAmount" class="modal-input" placeholder="Montant en €" min="1">
+            <div class="modal-buttons">
+                <button class="modal-btn confirm" onclick="game.confirmTransaction()">Confirmer</button>
+                <button class="modal-btn cancel" onclick="game.closeModal()">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class LotoGame {
+            constructor() {
+                this.balance = 1000; // Solde initial
+                this.selectedNumbers = [];
+                this.maxNumber = 20;
+                this.pickCount = 5;
+                this.transactions = [];
+                this.stats = {
+                    gamesPlayed: 0,
+                    totalWins: 0,
+                    biggestWin: 0
+                };
+                this.currentModalType = 'deposit';
+                
+                this.init();
+                this.loadData();
+                this.updateUI();
+            }
+
+            init() {
+                this.generateNumbers();
+                this.updateBalance();
+                this.updateStats();
+            }
+
+            generateNumbers() {
+                const grid = document.getElementById('numbersGrid');
+                grid.innerHTML = '';
+                
+                for (let i = 1; i <= this.maxNumber; i++) {
+                    const btn = document.createElement('button');
+                    btn.className = 'number-btn';
+                    btn.textContent = i;
+                    btn.onclick = () => this.toggleNumber(i);
+                    grid.appendChild(btn);
+                }
+            }
+
+            toggleNumber(num) {
+                const index = this.selectedNumbers.indexOf(num);
+                
+                if (index === -1) {
+                    if (this.selectedNumbers.length < this.pickCount) {
+                        this.selectedNumbers.push(num);
+                        this.selectedNumbers.sort((a, b) => a - b);
+                    } else {
+                        alert('Vous avez déjà sélectionné 5 numéros !');
+                        return;
+                    }
+                } else {
+                    this.selectedNumbers.splice(index, 1);
+                }
+                
+                this.updateNumbersUI();
+            }
+
+            updateNumbersUI() {
+                // Mettre à jour les boutons
+                document.querySelectorAll('.number-btn').forEach((btn, index) => {
+                    const num = index + 1;
+                    if (this.selectedNumbers.includes(num)) {
+                        btn.classList.add('selected');
+                    } else {
+                        btn.classList.remove('selected');
+                    }
+                });
+                
+                // Mettre à jour l'affichage des numéros sélectionnés
+                const selectedContainer = document.getElementById('selectedBalls');
+                selectedContainer.innerHTML = '';
+                
+                this.selectedNumbers.forEach(num => {
+                    const ball = document.createElement('div');
+                    ball.className = 'ball';
+                    ball.textContent = num;
+                    selectedContainer.appendChild(ball);
+                });
+                
+                // Activer/désactiver le bouton de tirage
+                const drawBtn = document.getElementById('drawBtn');
+                drawBtn.disabled = this.selectedNumbers.length !== this.pickCount || this.balance < 5;
+            }
+
+            play() {
+                const betAmount = parseInt(document.getElementById('betAmount').value);
+                
+                // Vérifier le solde
+                if (this.balance < betAmount) {
+                    alert('Solde insuffisant ! Faites un dépôt pour continuer.');
+                    return;
+                }
+                
+                // Déduire la mise
+                this.balance -= betAmount;
+                this.addTransaction('game', -betAmount, `Mise sur le loto`);
+                
+                // Générer le tirage
+                const draw = new Set();
+                while (draw.size < this.pickCount) {
+                    draw.add(Math.floor(Math.random() * this.maxNumber) + 1);
+                }
+                const drawNumbers = Array.from(draw).sort((a, b) => a - b);
+                
+                // Afficher le tirage
+                this.displayDraw(drawNumbers);
+                
+                // Calculer les gains
+                const matches = this.selectedNumbers.filter(num => drawNumbers.includes(num)).length;
+                const winnings = this.calculateWinnings(matches, betAmount);
+                
+                // Mettre à jour les statistiques
+                this.stats.gamesPlayed++;
+                
+                if (winnings > 0) {
+                    this.balance += winnings;
+                    this.stats.totalWins += winnings;
+                    this.stats.biggestWin = Math.max(this.stats.biggestWin, winnings);
+                    
+                    this.addTransaction('game', winnings, `Gain au loto (${matches} numéro(s))`);
+                    this.showWinMessage(winnings, matches);
+                } else {
+                    this.showWinMessage(0, matches);
+                }
+                
+                this.updateBalance();
+                this.updateStats();
+                this.saveData();
+            }
+
+            calculateWinnings(matches, betAmount) {
+                switch(matches) {
+                    case 5: return betAmount * 100; // Jackpot x100
+                    case 4: return betAmount * 20;  // x20
+                    case 3: return betAmount * 5;   // x5
+                    case 2: return betAmount * 2;   // x2
+                    default: return 0;
+                }
+            }
+
+            displayDraw(drawNumbers) {
+                const container = document.getElementById('resultBalls');
+                container.innerHTML = '';
+                
+                drawNumbers.forEach(num => {
+                    const ball = document.createElement('div');
+                    ball.className = 'ball';
+                    if (this.selectedNumbers.includes(num)) {
+                        ball.classList.add('win');
+                    }
+                    ball.textContent = num;
+                    container.appendChild(ball);
+                });
+            }
+
+            showWinMessage(winnings, matches) {
+                const messageDiv = document.getElementById('winMessage');
+                
+                if (winnings > 0) {
+                    messageDiv.style.display = 'block';
+                    messageDiv.innerHTML = `
+                        <div style="font-size: 1.5em; color: var(--success); margin-bottom: 10px;">🎉 GAGNÉ ! 🎉</div>
+                        <div class="win-amount">+${winnings} €</div>
+                        <div style="color: white; margin-top: 10px;">${matches} bon(s) numéro(s)</div>
+                    `;
+                } else {
+                    messageDiv.style.display = 'block';
+                    messageDiv.innerHTML = `
+                        <div style="font-size: 1.5em; color: var(--gray); margin-bottom: 10px;">😢 Pas de gain</div>
+                        <div style="color: white;">${matches} bon(s) numéro(s) - Réessayez !</div>
+                    `;
+                }
+                
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 5000);
+            }
+
+            // Wallet Functions
+            showDepositModal() {
+                this.currentModalType = 'deposit';
+                document.getElementById('modalTitle').textContent = 'Dépôt';
+                document.getElementById('transactionModal').classList.add('active');
+                document.getElementById('modalAmount').value = '';
+            }
+
+            showWithdrawModal() {
+                this.currentModalType = 'withdraw';
+                document.getElementById('modalTitle').textContent = 'Retrait';
+                document.getElementById('transactionModal').classList.add('active');
+                document.getElementById('modalAmount').value = '';
+            }
+
+            setAmount(amount) {
+                document.getElementById('modalAmount').value = amount;
+            }
+
+            confirmTransaction() {
+                const amount = parseInt(document.getElementById('modalAmount').value);
+                
+                if (isNaN(amount) || amount <= 0) {
+                    alert('Veuillez entrer un montant valide');
+                    return;
+                }
+                
+                if (this.currentModalType === 'deposit') {
+                    this.balance += amount;
+                    this.addTransaction('deposit', amount, 'Dépôt');
+                } else {
+                    if (amount > this.balance) {
+                        alert('Solde insuffisant pour ce retrait');
+                        return;
+                    }
+                    this.balance -= amount;
+                    this.addTransaction('withdraw', -amount, 'Retrait');
+                }
+                
+                this.updateBalance();
+                this.saveData();
+                this.closeModal();
+            }
+
+            closeModal() {
+                document.getElementById('transactionModal').classList.remove('active');
+            }
+
+            addTransaction(type, amount, description) {
+                const transaction = {
+                    type,
+                    amount,
+                    description,
+                    date: new Date().toLocaleString('fr-FR')
+                };
+                
+                this.transactions.unshift(transaction);
+                
+                // Garder seulement les 10 dernières transactions
+                if (this.transactions.length > 10) {
+                    this.transactions.pop();
+                }
+                
+                // Mettre à jour l'affichage de la dernière transaction
+                if (amount > 0) {
+                    document.getElementById('lastTransaction').innerHTML = `
+                        <span>+</span> Dernier dépôt : +${amount} €
+                    `;
+                } else if (amount < 0) {
+                    document.getElementById('lastTransaction').innerHTML = `
+                        <span>-</span> Dernier retrait : ${amount} €
+                    `;
+                }
+            }
+
+            showHistory() {
+                const historyDiv = document.getElementById('transactionHistory');
+                const transactionsList = document.getElementById('transactionsList');
+                
+                if (historyDiv.style.display === 'none') {
+                    historyDiv.style.display = 'block';
+                    
+                    transactionsList.innerHTML = '';
+                    this.transactions.forEach(t => {
+                        const item = document.createElement('div');
+                        item.className = 'transaction-item';
+                        
+                        let typeClass = '';
+                        let typeIcon = '';
+                        
+                        switch(t.type) {
+                            case 'deposit':
+                                typeClass = 'deposit';
+                                typeIcon = '💰';
+                                break;
+                            case 'withdraw':
+                                typeClass = 'withdraw';
+                                typeIcon = '💸';
+                                break;
+                            case 'game':
+                                typeClass = 'game';
+                                typeIcon = t.amount > 0 ? '🎰' : '🎲';
+                                break;
+                        }
+                        
+                        item.innerHTML = `
+                            <div class="transaction-type ${typeClass}">
+                                <span>${typeIcon}</span>
+                                <span>${t.description}</span>
+                            </div>
+                            <div>
+                                <span class="transaction-amount ${t.amount > 0 ? 'positive' : 'negative'}">
+                                    ${t.amount > 0 ? '+' : ''}${t.amount} €
+                                </span>
+                                <div style="font-size: 0.8em;">${t.date}</div>
+                            </div>
+                        `;
+                        
+                        transactionsList.appendChild(item);
+                    });
+                } else {
+                    historyDiv.style.display = 'none';
+                }
+            }
+
+            setMaxBet() {
+                const maxBet = Math.min(this.balance, 1000);
+                document.getElementById('betAmount').value = maxBet;
+            }
+
+            updateBalance() {
+                document.getElementById('balance').textContent = this.balance.toLocaleString('fr-FR');
+                
+                // Mettre à jour le statut du bouton de tirage
+                const drawBtn = document.getElementById('drawBtn');
+                drawBtn.disabled = this.selectedNumbers.length !== this.pickCount || this.balance < 5;
+            }
+
+            updateStats() {
+                document.getElementById('gamesPlayed').textContent = this.stats.gamesPlayed;
+                document.getElementById('totalWins').textContent = this.stats.totalWins.toLocaleString('fr-FR') + ' €';
+                document.getElementById('biggestWin').textContent = this.stats.biggestWin.toLocaleString('fr-FR') + ' €';
+            }
+
+            saveData() {
+                const data = {
+                    balance: this.balance,
+                    transactions: this.transactions,
+                    stats: this.stats
+                };
+                localStorage.setItem('lotoCashData', JSON.stringify(data));
+            }
+
+            loadData() {
+                const saved = localStorage.getItem('lotoCashData');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    this.balance = data.balance || 1000;
+                    this.transactions = data.transactions || [];
+                    this.stats = data.stats || {
+                        gamesPlayed: 0,
+                        totalWins: 0,
+                        biggestWin: 0
+                    };
+                }
+            }
+
+            resetGame() {
+                if (confirm('Voulez-vous vraiment recommencer une nouvelle partie ? Votre historique sera effacé.')) {
+                    localStorage.removeItem('lotoCashData');
+                    location.reload();
+                }
+            }
+
+            updateUI() {
+                this.updateBalance();
+                this.updateStats();
+                this.generateNumbers();
+            }
+        }
+
+        // Initialiser le jeu
+        const game = new LotoGame();
+    </script>
+</body>
+</html>
